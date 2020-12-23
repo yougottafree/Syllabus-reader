@@ -38,7 +38,8 @@ def main():
 
 def add_event(title, date, service,  location = "", description = ""):
     """
-    This function will add the event to the google calendar
+    This function will add the event to the google calendar, reminder will
+    be set as 1,2,3 and 7 days
     @param:
         title: the string represent title of the event
         location: the string represnt location of the event
