@@ -34,20 +34,19 @@ def main():
             pickle.dump(creds, token)
 
     service = build('calendar', 'v3', credentials=creds)
-    """
-    # Call the Calendar API
-    now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-    print('Getting the upcoming 10 events')
-    events_result = service.events().list(calendarId='primary', timeMin=now,
-                                        maxResults=10, singleEvents=True,
-                                        orderBy='startTime').execute()
-    events = events_result.get('items', [])
+    add_event("Trial", "2020-12-24", service)
 
-    if not events:
-        print('No upcoming events found.')
-    for event in events:
-        start = event['start'].get('dateTime', event['start'].get('date'))
-        print(start, event['summary'])
+def add_event(title, date, service,  location = "", description = ""):
+    """
+    This function will add the event to the google calendar
+    @param:
+        title: the string represent title of the event
+        location: the string represnt location of the event
+        description: the description of the project
+        date: yyyy-mm-dd
+        service: the google calendar instance that we are pushing the 
+                event to
+    @return : void
     """
     # Refer to the Python quickstart on how to setup the environment:
     # https://developers.google.com/calendar/quickstart/python
@@ -55,20 +54,17 @@ def main():
     # stored credentials.
 
     event = {
-    'summary': 'test thing',
-    'location': 'Hello World',
-    'description': 'A chance to hear more about Google\'s developer products.',
+    'summary': title,
+    'location': location,  
+    'description': description,
     'start': {
-        'date': '2020-12-23',
+        'date': date,
         'timeZone': 'America/Phoenix',
     },
     'end': {
-        'date': '2020-12-23',
+        'date': date,
         'timeZone': 'America/Phoenix',
     },
-    # 'recurrence': [
-    #    'RRULE:FREQ=WEEKLY;COUNT=17'
-    # ],
     'reminders': {
         'useDefault': False,
         'overrides': [
