@@ -7,7 +7,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 
 # If modifying these scopes, delete the file token.pickle.
-SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
+SCOPES = ['https://www.googleapis.com/auth/calendar']
 
 
 def main():
@@ -34,7 +34,7 @@ def main():
             pickle.dump(creds, token)
 
     service = build('calendar', 'v3', credentials=creds)
-
+    """
     # Call the Calendar API
     now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
     print('Getting the upcoming 10 events')
@@ -48,6 +48,42 @@ def main():
     for event in events:
         start = event['start'].get('dateTime', event['start'].get('date'))
         print(start, event['summary'])
+    """
+    # Refer to the Python quickstart on how to setup the environment:
+    # https://developers.google.com/calendar/quickstart/python
+    # Change the scope to 'https://www.googleapis.com/auth/calendar' and delete any
+    # stored credentials.
+
+    event = {
+    'summary': 'test thing',
+    'location': 'Hello World',
+    'description': 'A chance to hear more about Google\'s developer products.',
+    'start': {
+        'date': '2020-12-23',
+        'timeZone': 'America/Phoenix',
+    },
+    'end': {
+        'date': '2020-12-23',
+        'timeZone': 'America/Phoenix',
+    },
+    # 'recurrence': [
+    #    'RRULE:FREQ=WEEKLY;COUNT=17'
+    # ],
+    'reminders': {
+        'useDefault': False,
+        'overrides': [
+        {'method': 'popup', 'minutes': 24 * 60},
+        {'method': 'popup', 'minutes': 10},
+        {'method': 'popup', 'minutes': 24*60*2},
+        {'method': 'popup', 'minutes': 24*60*3},
+        {'method': 'popup', 'minutes': 24*60*7}
+        ],
+    },
+    }
+
+    event = service.events().insert(calendarId='primary', body=event).execute()
+    print('Event created: %s' % (event.get('htmlLink')))
+
 
 
 if __name__ == '__main__':
